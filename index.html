@@ -1,1 +1,214 @@
 
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arquivo Paranormal</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>⛧ ARQUIVO PARANORMAL</h1>
+    <nav>
+        <a href="#inicio">Início</a>
+        <a href="#classes">Classes</a>
+        <a href="#origens">Origens</a>
+        <a href="#pericias">Perícias</a>
+        <a href="#criacao">Criação</a>
+    </nav>
+</header>
+
+<section class="hero" id="inicio">
+    <h2>O primeiro passo para o Outro Lado</h2>
+    <p>
+        Um guia informativo para criação de personagens
+        no sistema de RPG Ordem Paranormal.
+    </p>
+    <a href="#criacao" class="botao">Criar personagem</a>
+</section>
+
+<section class="container">
+    <h2>Sobre o sistema</h2>
+    <p>
+        Ordem Paranormal RPG é um sistema de interpretação
+        em que os jogadores assumem o papel de agentes da
+        Ordem da Realidade, investigando manifestações
+        paranormais e enfrentando criaturas do Outro Lado.
+    </p>
+</section>
+
+<section class="container" id="classes">
+    <h2>Classes</h2>
+
+    <div class="cards">
+        <article class="card">
+            <h3>Combatente</h3>
+            <p>
+                Especialista em combate direto, armas e
+                resistência física. É responsável por
+                enfrentar ameaças e proteger a equipe.
+            </p>
+            <ul>
+                <li>PV iniciais: 20 + Vigor</li>
+                <li>PE iniciais: 2 + Presença</li>
+                <li>Sanidade inicial: 12</li>
+                <li>Perícias: Luta ou Pontaria; Fortitude
+                ou Reflexos; mais 2 + Intelecto.</li>
+            </ul>
+            <p><strong>Habilidade: Ataque Especial</strong></p>
+            <p>
+                Permite gastar PE para receber bônus
+                em testes de ataque ou dano.
+            </p>
+        </article>
+
+        <article class="card">
+            <h3>Especialista</h3>
+            <p>
+                Possui conhecimentos técnicos e habilidades
+                variadas. Destaca-se em investigações,
+                estratégias e resolução de problemas.
+            </p>
+            <ul>
+                <li>PV iniciais: 16 + Vigor</li>
+                <li>PE iniciais: 3 + Presença</li>
+                <li>Sanidade inicial: 16</li>
+                <li>Perícias: Investigação, Percepção
+                e 7 + Intelecto à escolha.</li>
+            </ul>
+            <p><strong>Habilidades: Eclético e Perito</strong></p>
+            <p>
+                Permitem improvisar conhecimentos e
+                melhorar testes em perícias treinadas.
+            </p>
+        </article>
+
+        <article class="card">
+            <h3>Ocultista</h3>
+            <p>
+                Estuda o paranormal e utiliza rituais
+                para manipular forças do Outro Lado.
+            </p>
+            <ul>
+                <li>PV iniciais: 12 + Vigor</li>
+                <li>PE iniciais: 4 + Presença</li>
+                <li>Sanidade inicial: 20</li>
+                <li>Perícias: Ocultismo, Vontade
+                e 3 + Intelecto à escolha.</li>
+            </ul>
+            <p><strong>Habilidades: Escolhido pelo Outro Lado e Ritualística</strong></p>
+            <p>
+                Permitem aprender e conjurar rituais
+                paranormais.
+            </p>
+        </article>
+    </div>
+</section>
+
+<section class="container" id="origens">
+    <h2>Origens</h2>
+    <p>
+        A origem representa a vida do personagem antes
+        de entrar para a Ordem. Cada origem concede
+        perícias treinadas e uma habilidade própria.
+    </p>
+
+    <input type="text" id="pesquisaOrigem"
+    placeholder="Pesquisar origem...">
+
+    <div class="cards" id="listaOrigens"></div>
+</section>
+
+<section class="container" id="pericias">
+    <h2>Perícias</h2>
+    <p>
+        As perícias representam conhecimentos e
+        capacidades adquiridas pelo personagem.
+    </p>
+
+    <input type="text" id="pesquisaPericia"
+    placeholder="Pesquisar perícia...">
+
+    <div id="listaPericias" class="pericias-grid"></div>
+</section>
+
+<section class="container" id="criacao">
+    <h2>Como criar seu personagem?</h2>
+
+    <div class="passo">
+        <h3>1. Crie um conceito</h3>
+        <p>
+            Pense na história do personagem, personalidade,
+            aparência, profissão anterior e motivações.
+        </p>
+    </div>
+
+    <div class="passo">
+        <h3>2. Distribua os atributos</h3>
+        <p>
+            Os atributos são Agilidade, Força, Intelecto,
+            Presença e Vigor. Cada um influencia
+            determinadas capacidades do personagem.
+        </p>
+        <ul>
+            <li>AGI: Agilidade</li>
+            <li>FOR: Força</li>
+            <li>INT: Intelecto</li>
+            <li>PRE: Presença</li>
+            <li>VIG: Vigor</li>
+        </ul>
+        <p>
+            No início, todos começam com 1 em cada atributo
+            e recebem 4 pontos para distribuir. É possível
+            reduzir um atributo para 0 para ganhar um
+            ponto adicional. O limite inicial é 3.
+        </p>
+    </div>
+
+    <div class="passo">
+        <h3>3. Escolha uma origem</h3>
+        <p>
+            Selecione a origem que representa o passado
+            do personagem. Anote suas perícias e habilidade.
+        </p>
+    </div>
+
+    <div class="passo">
+        <h3>4. Escolha uma classe</h3>
+        <p>
+            Escolha entre Combatente, Especialista
+            ou Ocultista, considerando a função que
+            deseja desempenhar na equipe.
+        </p>
+    </div>
+
+    <div class="passo">
+        <h3>5. Escolha suas perícias</h3>
+        <p>
+            Some as perícias recebidas pela origem e
+            pela classe. Depois, escolha as demais
+            conforme as regras da classe.
+        </p>
+    </div>
+
+    <div class="passo">
+        <h3>6. Finalize sua ficha</h3>
+        <p>
+            Anote os pontos de vida, pontos de esforço,
+            sanidade, habilidades, equipamentos,
+            aparência e características pessoais.
+        </p>
+    </div>
+</section>
+
+<footer>
+    <p>⛧ ARQUIVO PARANORMAL</p>
+    <p>Wiki independente de Ordem Paranormal RPG.</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
+
