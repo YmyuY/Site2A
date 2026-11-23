@@ -1,600 +1,470 @@
 
 /* ========================================
-   CONFIGURAÇÕES GERAIS
+   FUNÇÃO PARA NORMALIZAR PESQUISAS
 ======================================== */
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    scroll-behavior: smooth;
-}
-
-body {
-    background: #101014;
-    color: #eeeeee;
-    font-family: Arial, Helvetica, sans-serif;
-    line-height: 1.7;
-    position: relative;
-    isolation: isolate;
+function normalizarTexto(texto) {
+    return String(texto)
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim();
 }
 
 /* ========================================
-   PENTAGRAMA NO FUNDO
+   ORIGENS
 ======================================== */
 
-body::before {
-    content: "";
-    position: fixed;
-    top: 50%;
-    left: 50%;
+const origens = [
+    {
+        nome: "Acadêmico",
+        descricao: "Você dedicou boa parte da vida aos estudos, desenvolvendo conhecimentos teóricos e habilidades de pesquisa. Seu passado acadêmico pode ajudar a compreender fenômenos e solucionar problemas.",
+        pericias: "Ciências e Investigação",
+        habilidade: "Saber é Poder: representa sua formação e capacidade de utilizar conhecimentos acadêmicos."
+    },
+    {
+        nome: "Agente de Saúde",
+        descricao: "Você trabalhou ajudando pessoas em situações de emergência e vulnerabilidade. A experiência com cuidados e atendimento desenvolveu sua capacidade de lidar com situações delicadas.",
+        pericias: "Intuição e Medicina",
+        habilidade: "Técnico de Campo: representa sua experiência com cuidados e atendimento."
+    },
+    {
+        nome: "Amnésico",
+        descricao: "Você perdeu parte ou a totalidade de suas memórias. Seu passado é um mistério, e descobrir quem você realmente é pode ser tão importante quanto enfrentar o paranormal.",
+        pericias: "Duas a sua escolha",
+        habilidade: "Vislumbres do Passado: representa lembranças fragmentadas que podem surgir em momentos inesperados."
+    },
+    {
+        nome: "Artista",
+        descricao: "Você dedicou sua vida a alguma forma de expressão artística. Sua criatividade, sensibilidade e capacidade de interpretar situações fazem parte de sua identidade.",
+        pericias: "Artes e Enganação",
+        habilidade: "Magnum Opus: representa sua dedicação e talento artístico."
+    },
+    {
+        nome: "Atleta",
+        descricao: "Você treinou intensamente para alcançar excelência física em uma modalidade esportiva. Seu condicionamento e disciplina podem ser importantes em situações perigosas.",
+        pericias: "Acrobacia e Atletismo",
+        habilidade: "110%: representa sua dedicação ao treinamento físico."
+    },
+    {
+        nome: "Chef",
+        descricao: "Você trabalha ou trabalhou profissionalmente na cozinha. Desenvolveu disciplina, organização e habilidade para preparar alimentos e lidar com ambientes exigentes.",
+        pericias: "Fortitude e Profissão",
+        habilidade: "Ingrediente Secreto: representa seu conhecimento e experiência culinária."
+    },
+    {
+        nome: "Criminoso",
+        descricao: "Você viveu envolvido com atividades ilegais, aprendendo a lidar com situações arriscadas, escapar de problemas e agir fora das regras convencionais.",
+        pericias: "Crime e Enganação",
+        habilidade: "O Crime Compensa: representa sua experiência no submundo."
+    },
+    {
+        nome: "Cultista Arrependido",
+        descricao: "Você já fez parte de um grupo dedicado ao paranormal, mas abandonou essa vida. Seu passado pode trazer conhecimentos valiosos, embora também possa representar uma ameaça.",
+        pericias: "Ocultismo e Religião",
+        habilidade: "Traços do Outro Lado: representa conhecimentos adquiridos durante sua ligação anterior com o paranormal."
+    },
+    {
+        nome: "Desgarrado",
+        descricao: "Você passou boa parte da vida longe da sociedade, sobrevivendo em ambientes isolados e aprendendo a depender de si mesmo.",
+        pericias: "Fortitude e Sobrevivência",
+        habilidade: "Calejado: representa sua experiência em condições difíceis."
+    },
+    {
+        nome: "Engenheiro",
+        descricao: "Você possui formação ou experiência na criação, manutenção e compreensão de estruturas, máquinas e sistemas. Seu raciocínio técnico pode ser útil em investigações.",
+        pericias: "Profissão e Tecnologia",
+        habilidade: "Ferramenta Favorita: representa sua familiaridade com instrumentos e equipamentos técnicos."
+    },
+    {
+        nome: "Executivo",
+        descricao: "Você trabalhou em ambientes corporativos, desenvolvendo habilidades de liderança, negociação e administração. Está acostumado a lidar com decisões importantes.",
+        pericias: "Diplomacia e Profissão",
+        habilidade: "Processo Otimizado: representa sua capacidade de organizar recursos e atividades."
+    },
+    {
+        nome: "Investigador",
+        descricao: "Você dedicou sua vida a descobrir informações, reunir evidências e solucionar mistérios. Sua atenção aos detalhes pode fazer a diferença em uma missão.",
+        pericias: "Investigação e Percepção",
+        habilidade: "Faro para Pistas: representa sua experiência em encontrar e interpretar evidências."
+    },
+    {
+        nome: "Lutador",
+        descricao: "Você possui experiência em artes marciais, lutas ou confrontos físicos. Aprendeu a utilizar o próprio corpo como instrumento de defesa e ataque.",
+        pericias: "Luta e Reflexos",
+        habilidade: "Mão Pesada: representa sua experiência em confrontos corporais."
+    },
+    {
+        nome: "Magnata",
+        descricao: "Você acumulou riqueza, influência ou poder ao longo da vida. Está acostumado a ambientes de prestígio e a lidar com recursos e pessoas importantes.",
+        pericias: "Diplomacia e Pilotagem",
+        habilidade: "Patrocinador da Ordem: representa sua capacidade de utilizar recursos para auxiliar em missões."
+    },
+    {
+        nome: "Mercenário",
+        descricao: "Você trabalhou oferecendo seus serviços em troca de pagamento, frequentemente em situações perigosas. Aprendeu a lidar com ameaças e a cumprir objetivos sob pressão.",
+        pericias: "Iniciativa e Intimidação",
+        habilidade: "Posição de Combate: representa sua experiência em situações de confronto."
+    },
+    {
+        nome: "Militar",
+        descricao: "Você possui experiência em treinamento militar, disciplina e operações estratégicas. Aprendeu a trabalhar em equipe e agir sob pressão.",
+        pericias: "Pontaria e Tática",
+        habilidade: "Para Bellum: representa seu treinamento e conhecimento militar."
+    },
+    {
+        nome: "Operário",
+        descricao: "Você trabalhou em atividades que exigiam esforço físico, resistência e familiaridade com ferramentas e equipamentos. Está acostumado a ambientes de trabalho difíceis.",
+        pericias: "Fortitude e Profissão",
+        habilidade: "Ferramenta de Trabalho: representa sua experiência com instrumentos e atividades práticas."
+    },
+    {
+        nome: "Policial",
+        descricao: "Você atuou na aplicação da lei, lidando com ocorrências, investigações e situações de risco. Desenvolveu disciplina e capacidade de agir em emergências.",
+        pericias: "Percepção e Pontaria",
+        habilidade: "Patrulha: representa sua experiência em operações policiais."
+    },
+    {
+        nome: "Religioso",
+        descricao: "Você possui uma trajetória ligada à fé, espiritualidade e práticas religiosas. Sua experiência pode ajudar a compreender tradições e lidar com situações emocionalmente difíceis.",
+        pericias: "Religião e Vontade",
+        habilidade: "Acalentar: representa sua capacidade de oferecer apoio e orientação."
+    },
+    {
+        nome: "Servidor Público",
+        descricao: "Você trabalhou em instituições públicas, lidando com procedimentos, documentos e atendimento. Conhece o funcionamento de estruturas administrativas.",
+        pericias: "Intuição e Profissão",
+        habilidade: "Espírito Cívico: representa sua experiência com serviços e instituições públicas."
+    },
+    {
+        nome: "Teórico da Conspiração",
+        descricao: "Você sempre investigou acontecimentos misteriosos e teorias alternativas. Embora muitos desacreditem suas ideias, algumas de suas descobertas podem estar relacionadas ao paranormal.",
+        pericias: "Investigação e Ocultismo",
+        habilidade: "Eu Já Sabia: representa sua familiaridade com teorias e acontecimentos incomuns."
+    },
+    {
+        nome: "T.I.",
+        descricao: "Você trabalha ou trabalhou com tecnologia da informação, computadores e sistemas eletrônicos. Possui facilidade para compreender dispositivos e solucionar problemas técnicos.",
+        pericias: "Investigação e Tecnologia",
+        habilidade: "Motor de Busca: representa sua capacidade de encontrar informações utilizando tecnologia."
+    },
+    {
+        nome: "Trabalhador Rural",
+        descricao: "Você cresceu ou trabalhou no campo, desenvolvendo conhecimentos sobre a natureza, animais e atividades rurais. Está acostumado a ambientes afastados e condições difíceis.",
+        pericias: "Adestramento e Sobrevivência",
+        habilidade: "Desbravador: representa sua familiaridade com ambientes naturais."
+    },
+    {
+        nome: "Trambiqueiro",
+        descricao: "Você sobreviveu aplicando golpes, enganando pessoas e utilizando sua criatividade para escapar de situações complicadas.",
+        pericias: "Enganação e Crime",
+        habilidade: "Impostor: representa sua capacidade de assumir identidades e enganar outras pessoas."
+    },
+    {
+        nome: "Universitário",
+        descricao: "Você está cursando ou cursou o ensino superior, dedicando-se a uma área específica de conhecimento. Sua formação pode contribuir para a compreensão de diferentes assuntos.",
+        pericias: "Atualidades e Investigação",
+        habilidade: "Dedicação: representa seu esforço e dedicação aos estudos."
+    },
+    {
+        nome: "Vítima",
+        descricao: "Você sobreviveu a um acontecimento traumático ou inexplicável. Essa experiência mudou sua vida e pode ter despertado seu interesse pelos mistérios do paranormal.",
+        pericias: "Reflexos e Vontade",
+        habilidade: "Cicatrizes Psicológicas: representa as marcas deixadas por suas experiências."
+    }
+];
 
-    width: min(75vw, 850px);
-    height: min(75vw, 850px);
+/* ========================================
+   PERÍCIAS
+======================================== */
 
-    transform: translate(-50%, -50%);
+const pericias = [
+    {
+        nome: "Acrobacia",
+        atributo: "AGI",
+        descricao: "Representa sua coordenação motora, equilíbrio e capacidade de realizar movimentos complexos. É utilizada para saltar, equilibrar-se e executar manobras."
+    },
+    {
+        nome: "Adestramento",
+        atributo: "PRE",
+        descricao: "Representa sua capacidade de lidar com animais, treiná-los e compreender seus comportamentos. É utilizada para controlar, acalmar ou ensinar animais."
+    },
+    {
+        nome: "Artes",
+        atributo: "PRE",
+        descricao: "Representa seu conhecimento e habilidade em atividades artísticas, como música, pintura, atuação e outras formas de expressão."
+    },
+    {
+        nome: "Atletismo",
+        atributo: "FOR",
+        descricao: "Representa sua capacidade física para correr, saltar, escalar, nadar e realizar atividades que exigem força e resistência corporal."
+    },
+    {
+        nome: "Atualidades",
+        atributo: "INT",
+        descricao: "Representa seu conhecimento sobre acontecimentos recentes, notícias, política, cultura e informações relevantes do mundo."
+    },
+    {
+        nome: "Ciências",
+        atributo: "INT",
+        descricao: "Representa seu conhecimento científico e sua capacidade de compreender fenômenos naturais, realizar análises e interpretar informações técnicas."
+    },
+    {
+        nome: "Crime",
+        atributo: "AGI",
+        descricao: "Representa sua habilidade em atividades criminosas, como abrir fechaduras, furtar objetos, desarmar mecanismos e realizar ações clandestinas."
+    },
+    {
+        nome: "Diplomacia",
+        atributo: "PRE",
+        descricao: "Representa sua capacidade de negociar, convencer e resolver conflitos por meio da conversa. É utilizada para estabelecer acordos e influenciar pessoas."
+    },
+    {
+        nome: "Enganação",
+        atributo: "PRE",
+        descricao: "Representa sua capacidade de mentir, disfarçar intenções e manipular informações para convencer outras pessoas de algo falso."
+    },
+    {
+        nome: "Fortitude",
+        atributo: "VIG",
+        descricao: "Representa sua resistência física e capacidade de suportar condições adversas, como doenças, venenos, cansaço e outros efeitos prejudiciais."
+    },
+    {
+        nome: "Furtividade",
+        atributo: "AGI",
+        descricao: "Representa sua capacidade de se movimentar silenciosamente e evitar ser percebido. É utilizada para se esconder e passar despercebido."
+    },
+    {
+        nome: "Iniciativa",
+        atributo: "AGI",
+        descricao: "Representa sua velocidade de reação e capacidade de agir rapidamente diante de situações inesperadas, especialmente durante confrontos."
+    },
+    {
+        nome: "Intimidação",
+        atributo: "PRE",
+        descricao: "Representa sua capacidade de ameaçar, pressionar ou assustar outras pessoas para conseguir informações ou influenciar suas decisões."
+    },
+    {
+        nome: "Intuição",
+        atributo: "PRE",
+        descricao: "Representa sua capacidade de perceber intenções, interpretar comportamentos e identificar quando algo parece errado em determinada situação."
+    },
+    {
+        nome: "Investigação",
+        atributo: "INT",
+        descricao: "Representa sua capacidade de procurar pistas, analisar evidências, examinar locais e conectar informações para solucionar mistérios."
+    },
+    {
+        nome: "Luta",
+        atributo: "FOR",
+        descricao: "Representa sua capacidade de combater utilizando o próprio corpo ou armas de combate corpo a corpo, como socos, chutes e golpes."
+    },
+    {
+        nome: "Medicina",
+        atributo: "INT",
+        descricao: "Representa seu conhecimento sobre o corpo humano, doenças, ferimentos e procedimentos de primeiros socorros e atendimento médico."
+    },
+    {
+        nome: "Ocultismo",
+        atributo: "INT",
+        descricao: "Representa seu conhecimento sobre o paranormal, rituais, manifestações, entidades e fenômenos relacionados ao Outro Lado."
+    },
+    {
+        nome: "Percepção",
+        atributo: "PRE",
+        descricao: "Representa sua capacidade de observar o ambiente e identificar detalhes, sons, movimentos e mudanças que poderiam passar despercebidos."
+    },
+    {
+        nome: "Pilotagem",
+        atributo: "AGI",
+        descricao: "Representa sua habilidade para conduzir veículos e controlar diferentes meios de transporte em situações comuns ou perigosas."
+    },
+    {
+        nome: "Pontaria",
+        atributo: "AGI",
+        descricao: "Representa sua precisão e capacidade de utilizar armas de ataque à distância, como armas de fogo, arcos e outros equipamentos."
+    },
+    {
+        nome: "Profissão",
+        atributo: "INT",
+        descricao: "Representa seu conhecimento e experiência em uma atividade profissional específica, permitindo executar tarefas relacionadas à sua ocupação."
+    },
+    {
+        nome: "Reflexos",
+        atributo: "AGI",
+        descricao: "Representa sua velocidade de reação e capacidade de responder rapidamente a perigos, esquivar-se e escapar de situações repentinas."
+    },
+    {
+        nome: "Religião",
+        atributo: "PRE",
+        descricao: "Representa seu conhecimento sobre crenças, tradições religiosas, símbolos, rituais e práticas espirituais de diferentes culturas."
+    },
+    {
+        nome: "Sobrevivência",
+        atributo: "INT",
+        descricao: "Representa seu conhecimento sobre técnicas de sobrevivência em ambientes naturais e hostis. Pode ser utilizada para encontrar abrigo, identificar recursos, rastrear caminhos e orientar-se em regiões desconhecidas."
+    },
+    {
+        nome: "Tática",
+        atributo: "INT",
+        descricao: "Representa seu conhecimento estratégico e capacidade de planejar ações. É utilizada para organizar operações, analisar posições, coordenar equipes e elaborar estratégias durante confrontos."
+    },
+    {
+        nome: "Tecnologia",
+        atributo: "INT",
+        descricao: "Representa seu conhecimento sobre dispositivos eletrônicos, computadores, sistemas e equipamentos tecnológicos. Pode ser utilizada para operar aparelhos, compreender sistemas e solucionar problemas técnicos."
+    },
+    {
+        nome: "Vontade",
+        atributo: "PRE",
+        descricao: "Representa sua determinação, estabilidade emocional e força mental. É utilizada para resistir a pressões psicológicas, manter a concentração e enfrentar situações que ameaçam a mente."
+    }
+];
 
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 500'%3E%3Cg fill='none' stroke='%23a51c29' stroke-width='3'%3E%3Ccircle cx='250' cy='250' r='210'/%3E%3Ccircle cx='250' cy='250' r='190'/%3E%3Cpath d='M250 35 L376 423 L45 183 L455 183 L124 423 Z'/%3E%3C/g%3E%3C/svg%3E");
+/* ========================================
+   EXIBIR ORIGENS
+======================================== */
 
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
+function mostrarOrigens(filtro = "") {
+    const listaOrigens = document.getElementById("listaOrigens");
+    const contadorOrigens = document.getElementById("contadorOrigens");
 
-    opacity: 0.09;
-    pointer-events: none;
-    z-index: -1;
+    listaOrigens.innerHTML = "";
+
+    const termo = normalizarTexto(filtro);
+
+    const origensFiltradas = origens.filter(origem => {
+        return (
+            normalizarTexto(origem.nome).includes(termo) ||
+            normalizarTexto(origem.descricao).includes(termo) ||
+            normalizarTexto(origem.pericias).includes(termo) ||
+            normalizarTexto(origem.habilidade).includes(termo)
+        );
+    });
+
+    origensFiltradas.forEach(origem => {
+        const card = document.createElement("article");
+        card.className = "origem-card";
+
+        const titulo = document.createElement("h3");
+        titulo.textContent = origem.nome;
+
+        const descricao = document.createElement("p");
+        descricao.textContent = origem.descricao;
+
+        const periciasTexto = document.createElement("p");
+        const periciasTitulo = document.createElement("strong");
+        periciasTitulo.textContent = "Perícias: ";
+        periciasTexto.appendChild(periciasTitulo);
+        periciasTexto.appendChild(document.createTextNode(origem.pericias));
+
+        const habilidadeTexto = document.createElement("p");
+        const habilidadeTitulo = document.createElement("strong");
+        habilidadeTitulo.textContent = "Habilidade: ";
+        habilidadeTexto.appendChild(habilidadeTitulo);
+        habilidadeTexto.appendChild(document.createTextNode(origem.habilidade));
+
+        card.appendChild(titulo);
+        card.appendChild(descricao);
+        card.appendChild(periciasTexto);
+        card.appendChild(habilidadeTexto);
+
+        listaOrigens.appendChild(card);
+    });
+
+    contadorOrigens.textContent =
+        `${origensFiltradas.length} de ${origens.length} origens encontradas`;
+
+    if (origensFiltradas.length === 0) {
+        listaOrigens.innerHTML =
+            '<p class="sem-resultados">Nenhuma origem encontrada.</p>';
+    }
 }
 
 /* ========================================
-   CABEÇALHO
+   EXIBIR PERÍCIAS
 ======================================== */
 
-.header {
-    width: 100%;
-    min-height: 70px;
-    padding: 15px 5%;
+function mostrarPericias(filtro = "") {
+    const listaPericias = document.getElementById("listaPericias");
+    const contadorPericias = document.getElementById("contadorPericias");
 
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 15px;
+    listaPericias.innerHTML = "";
 
-    background: #09090c;
-    border-bottom: 1px solid #8e1824;
+    const termo = normalizarTexto(filtro);
 
-    position: sticky;
-    top: 0;
-    z-index: 100;
-}
+    const periciasFiltradas = pericias.filter(pericia => {
+        return (
+            normalizarTexto(pericia.nome).includes(termo) ||
+            normalizarTexto(pericia.atributo).includes(termo) ||
+            normalizarTexto(pericia.descricao).includes(termo)
+        );
+    });
 
-.logo {
-    color: #d12c39;
-    font-size: 20px;
-    font-weight: bold;
-    letter-spacing: 1px;
-}
+    periciasFiltradas.forEach(pericia => {
 
-nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-}
+        // Cria o card
+        const item = document.createElement("article");
+        item.className = "pericia";
 
-nav a {
-    color: #eeeeee;
-    text-decoration: none;
-    font-size: 14px;
-    transition: color 0.3s;
-}
+        // Cria a linha superior
+        const topo = document.createElement("div");
+        topo.className = "pericia-topo";
 
-nav a:hover {
-    color: #d12c39;
+        // Nome da perícia
+        const nome = document.createElement("strong");
+        nome.className = "pericia-nome";
+        nome.textContent = pericia.nome;
+
+        // Atributo correspondente
+        const atributo = document.createElement("span");
+        atributo.className = "pericia-atributo";
+        atributo.textContent = pericia.atributo;
+
+        // Descrição
+        const descricao = document.createElement("p");
+        descricao.className = "pericia-descricao";
+        descricao.textContent = pericia.descricao;
+
+        // Organiza os elementos
+        topo.appendChild(nome);
+        topo.appendChild(atributo);
+
+        item.appendChild(topo);
+        item.appendChild(descricao);
+
+        listaPericias.appendChild(item);
+    });
+
+    // Atualiza o contador
+    contadorPericias.textContent =
+        `${periciasFiltradas.length} de ${pericias.length} perícias encontradas`;
+
+    // Mensagem caso não existam resultados
+    if (periciasFiltradas.length === 0) {
+        listaPericias.innerHTML =
+            '<p class="sem-resultados">Nenhuma perícia encontrada.</p>';
+    }
 }
 
 /* ========================================
-   CAPA / HERO
+   EVENTOS DE PESQUISA
 ======================================== */
 
-.hero {
-    min-height: 480px;
-    padding: 100px 8%;
+const campoOrigem = document.getElementById("pesquisaOrigem");
+const campoPericia = document.getElementById("pesquisaPericia");
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+campoOrigem.addEventListener("input", function () {
+    mostrarOrigens(this.value);
+});
 
-    background:
-        linear-gradient(rgba(10, 10, 14, 0.85), rgba(10, 10, 14, 0.95)),
-        radial-gradient(circle, #4a1018, #101014 70%);
-
-    border-bottom: 1px solid #4a151d;
-}
-
-.hero-content {
-    max-width: 850px;
-}
-
-.subtitulo {
-    color: #d12c39;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    font-size: 13px;
-    margin-bottom: 15px;
-}
-
-.hero h1 {
-    color: #eeeeee;
-    font-size: clamp(32px, 6vw, 60px);
-    letter-spacing: 4px;
-    margin-bottom: 20px;
-}
-
-.hero p {
-    color: #cccccc;
-    max-width: 700px;
-    margin: 0 auto 25px;
-}
-
-.botao {
-    display: inline-block;
-    padding: 12px 25px;
-
-    background: #a51c29;
-    color: white;
-
-    text-decoration: none;
-    border-radius: 4px;
-    font-weight: bold;
-
-    transition: background 0.3s, transform 0.3s;
-}
-
-.botao:hover {
-    background: #d12c39;
-    transform: translateY(-3px);
-}
+campoPericia.addEventListener("input", function () {
+    mostrarPericias(this.value);
+});
 
 /* ========================================
-   CONTEÚDO GERAL
+   INICIALIZAÇÃO DO SITE
 ======================================== */
 
-.container {
-    width: 90%;
-    max-width: 1200px;
-    margin: 55px auto;
-    padding: 10px 0;
-}
-
-.container h2 {
-    color: #d12c39;
-    font-size: 28px;
-    margin-bottom: 18px;
-    border-bottom: 1px solid #512028;
-    padding-bottom: 10px;
-}
-
-.container > p {
-    color: #cccccc;
-    margin-bottom: 15px;
-    text-align: justify;
-}
-
-/* ========================================
-   CARDS GERAIS E CLASSES
-======================================== */
-
-.cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 15px;
-    width: 100%;
-    align-items: stretch;
-}
-
-.card {
-    background: rgba(25, 25, 34, 0.96);
-    border: 1px solid #383838;
-    border-radius: 5px;
-    padding: 20px;
-    min-width: 0;
-
-    transition: transform 0.2s, border-color 0.2s;
-}
-
-.card:hover {
-    transform: translateY(-3px);
-    border-color: #a51c29;
-}
-
-.card h3 {
-    color: #d12c39;
-    font-size: 20px;
-    margin-bottom: 12px;
-}
-
-.card h4 {
-    color: #eeeeee;
-    margin-top: 15px;
-    margin-bottom: 8px;
-}
-
-.card p,
-.card li {
-    color: #cccccc;
-    font-size: 14px;
-    overflow-wrap: break-word;
-}
-
-.card ul {
-    padding-left: 20px;
-}
-
-.classe-combatente {
-    border-top: 3px solid #a51c29;
-}
-
-.classe-especialista {
-    border-top: 3px solid #a58b35;
-}
-
-.classe-ocultista {
-    border-top: 3px solid #6041a5;
-}
-
-/* ========================================
-   CAMPOS DE PESQUISA
-======================================== */
-
-input[type="text"] {
-    display: block;
-    width: 100%;
-    max-width: 500px;
-
-    padding: 13px 15px;
-    margin: 20px 0 12px;
-
-    background: #191920;
-    color: #eeeeee;
-
-    border: 1px solid #444444;
-    border-radius: 4px;
-
-    font-size: 15px;
-    outline: none;
-}
-
-input[type="text"]:focus {
-    border-color: #d12c39;
-    box-shadow: 0 0 5px rgba(209, 44, 57, 0.3);
-}
-
-input::placeholder {
-    color: #999999;
-}
-
-.contador {
-    color: #999999;
-    font-size: 13px;
-    margin-bottom: 15px;
-}
-
-/* ========================================
-   CARDS DE ORIGENS
-======================================== */
-
-.origem-card {
-    background: rgba(25, 25, 34, 0.96);
-    border: 1px solid #383838;
-    border-left: 3px solid #a51c29;
-
-    border-radius: 5px;
-    padding: 18px;
-
-    min-width: 0;
-    overflow-wrap: break-word;
-
-    transition: transform 0.2s, border-color 0.2s;
-}
-
-.origem-card:hover {
-    transform: translateY(-3px);
-    border-color: #d12c39;
-}
-
-.origem-card h3 {
-    color: #d12c39;
-    font-size: 18px;
-    margin-bottom: 10px;
-}
-
-.origem-card p {
-    color: #cccccc;
-    font-size: 14px;
-    margin-bottom: 10px;
-    overflow-wrap: break-word;
-}
-
-.origem-card strong {
-    color: #eeeeee;
-}
-
-/* ========================================
-   LEGENDA DOS ATRIBUTOS
-======================================== */
-
-.legenda {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px 20px;
-
-    padding: 15px;
-    margin: 15px 0;
-
-    background: rgba(25, 25, 34, 0.96);
-    border: 1px solid #383838;
-    border-radius: 5px;
-}
-
-.legenda span {
-    color: #cccccc;
-    font-size: 13px;
-}
-
-.legenda strong {
-    color: #d12c39;
-}
-
-/* ========================================
-   PERÍCIAS - CORREÇÃO DO ALINHAMENTO
-======================================== */
-
-.pericias-grid {
-    display: grid;
-
-    /* Cria colunas de tamanho adequado */
-    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-
-    gap: 15px;
-    width: 100%;
-    align-items: stretch;
-}
-
-/* Card individual */
-.pericia {
-    background: rgba(25, 25, 34, 0.96);
-    border: 1px solid #3b3b3b;
-    border-radius: 5px;
-    padding: 15px;
-
-    /* CORREÇÃO: organiza o conteúdo verticalmente */
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: flex-start;
-
-    width: 100%;
-    min-width: 0;
-    box-sizing: border-box;
-
-    transition: transform 0.2s ease, border-color 0.2s ease;
-}
-
-.pericia:hover {
-    transform: translateY(-3px);
-    border-color: #a51c29;
-}
-
-/* Nome e atributo na primeira linha */
-.pericia-topo {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 5px;
-
-    width: 100%;
-    margin-bottom: 10px;
-}
-
-/* Nome da perícia */
-.pericia-nome {
-    color: #eeeeee;
-    font-size: 16px;
-    font-weight: bold;
-    overflow-wrap: anywhere;
-}
-
-/* Atributo da perícia */
-.pericia-atributo {
-    color: #d12c39;
-    font-size: 14px;
-    font-weight: bold;
-    white-space: nowrap;
-}
-
-/* Descrição abaixo do nome */
-.pericia-descricao {
-    display: block;
-    width: 100%;
-    margin: 0;
-
-    color: #cccccc;
-    font-size: 14px;
-    line-height: 1.6;
-
-    overflow-wrap: break-word;
-    word-wrap: break-word;
-    white-space: normal;
-
-    box-sizing: border-box;
-}
-
-/* ========================================
-   ETAPAS DE CRIAÇÃO
-======================================== */
-
-.passos {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 15px;
-}
-
-.passo {
-    position: relative;
-
-    background: rgba(25, 25, 34, 0.96);
-    border: 1px solid #383838;
-    border-radius: 5px;
-
-    padding: 20px;
-    min-width: 0;
-
-    transition: transform 0.2s, border-color 0.2s;
-}
-
-.passo:hover {
-    transform: translateY(-3px);
-    border-color: #a51c29;
-}
-
-.numero {
-    display: inline-block;
-    color: #d12c39;
-    font-size: 26px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.passo h3 {
-    color: #eeeeee;
-    font-size: 17px;
-    margin-bottom: 10px;
-}
-
-.passo p {
-    color: #cccccc;
-    font-size: 14px;
-    overflow-wrap: break-word;
-}
-
-/* ========================================
-   MENSAGEM SEM RESULTADOS
-======================================== */
-
-.sem-resultados {
-    grid-column: 1 / -1;
-    width: 100%;
-    padding: 20px;
-
-    color: #aaaaaa;
-    text-align: center;
-
-    background: rgba(25, 25, 34, 0.96);
-    border: 1px solid #383838;
-    border-radius: 5px;
-}
-
-/* ========================================
-   RODAPÉ
-======================================== */
-
-footer {
-    padding: 30px 15px;
-    margin-top: 60px;
-
-    background: #09090c;
-    border-top: 1px solid #8e1824;
-
-    text-align: center;
-}
-
-footer p:first-child {
-    color: #d12c39;
-    font-weight: bold;
-    font-size: 18px;
-}
-
-footer p,
-footer small {
-    color: #999999;
-    font-size: 13px;
-}
-
-/* ========================================
-   RESPONSIVIDADE
-======================================== */
-
-@media (max-width: 900px) {
-    body::before {
-        width: 85vw;
-        height: 85vw;
-    }
-
-    .header {
-        justify-content: center;
-        text-align: center;
-    }
-
-    nav {
-        justify-content: center;
-    }
-}
-
-@media (max-width: 600px) {
-    body::before {
-        width: 100vw;
-        height: 100vw;
-        opacity: 0.06;
-    }
-
-    .container {
-        width: 92%;
-        margin: 35px auto;
-    }
-
-    .container h2 {
-        font-size: 23px;
-    }
-
-    .hero {
-        min-height: 400px;
-        padding: 70px 5%;
-    }
-
-    .hero h1 {
-        font-size: 32px;
-    }
-
-    .logo {
-        font-size: 17px;
-    }
-
-    nav {
-        gap: 12px;
-    }
-
-    nav a {
-        font-size: 12px;
-    }
-
-    .cards,
-    .pericias-grid,
-    .passos {
-        grid-template-columns: 1fr;
-    }
-
-    .pericia {
-        padding: 14px;
-    }
-
-    .pericia-nome {
-        font-size: 15px;
-    }
-
-    .pericia-descricao {
-        font-size: 13px;
-    }
-}
+mostrarOrigens();
+mostrarPericias();
