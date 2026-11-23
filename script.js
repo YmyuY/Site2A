@@ -448,23 +448,48 @@ function mostrarPericias(filtro = "") {
 }
 
 /* ========================================
-   EVENTOS DE PESQUISA
+   INICIALIZAÇÃO E PESQUISAS
 ======================================== */
 
-const campoOrigem = document.getElementById("pesquisaOrigem");
-const campoPericia = document.getElementById("pesquisaPericia");
+document.addEventListener("DOMContentLoaded", function () {
 
-campoOrigem.addEventListener("input", function () {
-    mostrarOrigens(this.value);
+    const campoOrigem = document.getElementById("pesquisaOrigem");
+    const campoPericia = document.getElementById("pesquisaPericia");
+
+    const listaOrigens = document.getElementById("listaOrigens");
+    const listaPericias = document.getElementById("listaPericias");
+
+    const contadorOrigens = document.getElementById("contadorOrigens");
+    const contadorPericias = document.getElementById("contadorPericias");
+
+    // Verifica se os elementos necessários existem
+    if (
+        !campoOrigem ||
+        !campoPericia ||
+        !listaOrigens ||
+        !listaPericias ||
+        !contadorOrigens ||
+        !contadorPericias
+    ) {
+        console.error(
+            "Erro: algum elemento HTML necessário não foi encontrado. Confira os IDs das seções."
+        );
+        return;
+    }
+
+    // Pesquisa de origens
+    campoOrigem.addEventListener("input", function () {
+        mostrarOrigens(this.value);
+    });
+
+    // Pesquisa de perícias
+    campoPericia.addEventListener("input", function () {
+        mostrarPericias(this.value);
+    });
+
+    // Carrega os conteúdos ao abrir o site
+    mostrarOrigens();
+    mostrarPericias();
+
+    console.log("Origens e perícias carregadas com sucesso!");
 });
-
-campoPericia.addEventListener("input", function () {
-    mostrarPericias(this.value);
-});
-
-/* ========================================
-   INICIALIZAÇÃO DO SITE
-======================================== */
-
-mostrarOrigens();
-mostrarPericias();
